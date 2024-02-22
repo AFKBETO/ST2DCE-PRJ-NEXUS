@@ -12,7 +12,7 @@ WORKDIR /app
 COPY pom.xml .
 
 # Download dependencies
-RUN mvn dependency:purge-local-repository -Djar.version=$JAR_VERSION
+RUN mvn dependency:go-offline -Djar.version=$JAR_VERSION
 
 
 # Copy the application code
