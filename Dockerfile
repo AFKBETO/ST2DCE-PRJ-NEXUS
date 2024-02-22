@@ -12,8 +12,7 @@ WORKDIR /app
 COPY pom.xml .
 
 # Download dependencies
-RUN mvn dependency:go-offline -Djar.version=$JAR_VERSION
-
+RUN mvn dependency:go-offline
 
 # Copy the application code
 COPY src src
