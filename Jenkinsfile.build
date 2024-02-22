@@ -1,4 +1,8 @@
-dockerImage = 'dockernexus101/app01'
+properties([
+	parameters([
+		string(name: 'dockerImage', defaultValue: 'dockernexus101/app01', description: 'Docker image repository')
+	])
+])
 
 def readCurrentTag() {
 	def tag = sh(returnStdout: true, script: "git --no-pager tag --points-at HEAD").trim()
@@ -39,7 +43,7 @@ pipeline {
 					agent { label 'amd64' }
 					steps {
 						script {
-							imageamd64 = docker.build("${dockerImage}:${imgTag}-amd64", "--build-arg JAR_VERSION=${imgTag} .")
+							imageamd64 = docker.build("${params.dockerImage}:${imgTag}-amd64", "--build-arg JAR_VERSION=${imgTag} .")
 						}
 					}
 				}
@@ -47,7 +51,7 @@ pipeline {
 					agent { label 'arm64' }
 					steps {
 						script {
-							imagearm64 = docker.build("${dockerImage}:${imgTag}-arm64", "--build-arg JAR_VERSION=${imgTag} .")
+							imagearm64 = docker.build("${params.dockerImage}:${imgTag}-arm64", "--build-arg JAR_VERSION=${imgTag} .")
 						}
 					}
 				}
@@ -84,8 +88,8 @@ pipeline {
 				script {
 					withDockerRegistry(credentialsId: 'dockernexus101') {
 						sh """
-							docker manifest create ${dockerImage}:${imgTag} ${dockerImage}:${imgTag}-amd64 ${dockerImage}:${imgTag}-arm64
-							docker manifest push ${dockerImage}:${imgTag}
+							docker manifest create ${params.dockerImage}:${imgTag} ${params.dockerImage}:${imgTag}-amd64 ${params.dockerImage}:${imgTag}-arm64
+							docker manifest push ${params.dockerImage}:${imgTag}
 						"""
 					}
 				}
