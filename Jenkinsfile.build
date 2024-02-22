@@ -39,7 +39,7 @@ pipeline {
 					agent { label 'amd64' }
 					steps {
 						script {
-							imageamd64 = docker.build("${dockerImage}:${imgTag}-amd64")
+							imageamd64 = docker.build("${dockerImage}:${imgTag}-amd64", "--build-arg JAR_VERSION=${imgTag} .")
 						}
 					}
 				}
@@ -47,7 +47,7 @@ pipeline {
 					agent { label 'arm64' }
 					steps {
 						script {
-							imagearm64 = docker.build("${dockerImage}:${imgTag}-arm64")
+							imagearm64 = docker.build("${dockerImage}:${imgTag}-arm64", "--build-arg JAR_VERSION=${imgTag} .")
 						}
 					}
 				}
