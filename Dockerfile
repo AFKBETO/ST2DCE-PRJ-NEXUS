@@ -1,7 +1,7 @@
 ARG JAR_VERSION=0.0.1-SNAPSHOT
 
 # Use an official Maven image as a build stage
-FROM maven:3.9.5-amazoncorretto-17-debian AS build
+FROM maven:3.8.4-openjdk-17 AS build
 
 ARG JAR_VERSION
 
